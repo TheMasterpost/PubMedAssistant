@@ -1,0 +1,3 @@
+[submodule "PubMed"]
+	path = PubMed
+	url = https://github.com/TheMasterpost/PubMed.git

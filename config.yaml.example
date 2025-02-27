@@ -1,0 +1,6 @@
+NCBI_API_KEY: 5b3e6cd9f20f4f5d1fe11cb5fce88875a109
+
+openai:
+  model: openai/gpt-4o
+  api_key: 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
+  base_url: https://openrouter.ai/api/v1
