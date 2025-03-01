@@ -48,7 +48,6 @@ export default function Home() {
 
   const features = [
     { id: 'search' as Feature, icon: Search, label: 'Search Literature ' },
-    { id: 'details' as Feature, icon: FileText, label: 'Get Document Details' },
     { id: 'translate' as Feature, icon: Languages, label: 'Translated Documents' },
     { id: 'download' as Feature, icon: Download, label: 'Download Literature PDF' },
   ];
