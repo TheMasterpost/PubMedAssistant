@@ -165,7 +165,7 @@ export default function Home() {
             feature: selectedFeature 
           }),
         });
-      }
+      } 
 
       const data = await response.json();
         

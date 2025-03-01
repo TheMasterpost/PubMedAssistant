@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "PubMed Assistant",
   description: "Your AI-powered PubMed research assistant",
 };
-
+ 
 export default function RootLayout({
   children,
 }: {
