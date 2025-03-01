@@ -61,10 +61,10 @@ async def async_main():
                     logger.info(f"详细信息 PMID {pmid}: {detail}")
                     # 添加控制台输出
                     print(f"\nPMID: {pmid}")
-                    print(f"Title: {detail.get('title', '无')}")
-                    print(f"Abstract: {detail.get('abstract', '无')[:1300]}...")
+                    print(f"标题: {detail.get('title', '无')}")
+                    print(f"摘要: {detail.get('abstract', '无')[:200]}...")
             
-            print(f"\nSuccessfully obtained {success_count}/{len(results)} detailed information of article")
+            print(f"\n成功获取 {success_count}/{len(results)} 篇文献的详细信息")
 
     except Exception as e:
         logger.error(f"搜索过程中发生错误: {str(e)}")

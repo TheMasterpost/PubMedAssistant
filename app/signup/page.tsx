@@ -1,34 +1,33 @@
-// app/signup/page.tsx
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Lock, Mail, User } from "lucide-react"
-import { signIn } from "next-auth/react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Lock, Mail, User } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 export default function SignupPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
-  })
+    confirmPassword: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      return
+      setError("Passwords do not match");
+      return;
     }
 
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
       const response = await fetch("/api/auth/signup", {
@@ -39,53 +38,56 @@ export default function SignupPage() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Signup failed")
+        throw new Error(data.error || "Signup failed");
       }
 
-      // Redirect to login page on successful signup
-      router.push("/login")
+      router.push("/login");
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Signup failed")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-    setError(null)
-  }
-
-  const handleGoogleLogin = async () => {
-    setLoading(true);
-    try {
-      await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
-      setError("Failed to login with Google");
+      setError(error instanceof Error ? error.message : "Signup failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError(null);
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Directly trigger Google login
+      await signIn("google", { redirectTo: "/" });
+    } catch (error) {
+      console.error("Google login error:", error);
+      setError("Failed to login with Google");
+      setLoading(false); // Ensure loading resets on error
+    }
+  };
+
   const handleGitHubLogin = async () => {
     setLoading(true);
+    setError(null);
     try {
-      await signIn("github", { callbackUrl: "/" });
+      // Directly trigger GitHub login
+      await signIn("github", { redirectTo: "/" });
     } catch (error) {
+      console.error("GitHub login error:", error);
       setError("Failed to login with GitHub");
-    } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading resets on error
     }
   };
 
@@ -190,18 +192,28 @@ export default function SignupPage() {
           <Button
             type="button"
             onClick={handleGoogleLogin}
+            disabled={loading}
             className="w-full h-14 text-lg bg-white hover:bg-gray-50 text-gray-800 border-2 border-gray-200 rounded-lg transition-colors"
           >
-            Continue with Google
+            {loading ? (
+              <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-500 border-t-transparent" />
+            ) : (
+              "Continue with Google"
+            )}
           </Button>
 
           {/* GitHub Login Button */}
           <Button
             type="button"
             onClick={handleGitHubLogin}
+            disabled={loading}
             className="w-full h-14 text-lg bg-white hover:bg-gray-50 text-gray-800 border-2 border-gray-200 rounded-lg transition-colors"
           >
-            Continue with GitHub
+            {loading ? (
+              <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-500 border-t-transparent" />
+            ) : (
+              "Continue with GitHub"
+            )}
           </Button>
 
           {/* Additional Links */}
@@ -216,5 +228,5 @@ export default function SignupPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
